@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: Social Media Page - OpenAPI 3.0
+  description: |-
+    This is a sample of a Social Media Page to make simple things based on the OpenAPI 3.0 specification.
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.socialmediapage.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://socialmediapage.example.com/v1
+tags:
+  - name: post
+    description: Operations about posts
+  - name: user
+    description: Operations about users
+paths:
+  /post:
+    get:
+      tags:
+        - post
+      summary: Get list of all posts
+      description: Retrieve a list of all posts.
+      operationId: getPosts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - post
+      summary: Create a new post
+      description: Create a new post.
+      operationId: createPost
+      requestBody:
+        description: post object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+        required: true
+      responses:
+        '201':
+          description: post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Invalid input
+  /posts/{postId}:
+    get:
+      tags:
+        - post
+      summary: Get post details
+      description: Retrieve details of a specific postId by its ID.
+      operationId: getPostById
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: ID of the post to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: post not found
+    delete:
+      tags:
+        - post
+      summary: Delete a post
+      description: Delete a post by its ID.
+      operationId: deletePost
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: ID of the post to be deleted
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Post deleted successfully
+        '404':
+          description: Post not found
+  /users:
+    get:
+      tags:
+        - user
+      summary: Get list of all users
+      description: Retrieve a list of all users.
+      operationId: getUsers
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Internal server error
+  /users/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user details
+      description: Retrieve details of a specific user by their ID.
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+components:
+  schemas:
+    Post:
+      type: object
+      required:
+        - id
+        - header
+        - text
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the post
+        header:
+          type: string
+          description: Header of the post
+        text:
+          type: string
+          description: Text of the post 
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the post was created
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        name:
+          type: string
+          description: Name of the user
+        email:
+          type: string
+          description: Email address of the user
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the user was created
